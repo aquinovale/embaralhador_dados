@@ -12,6 +12,11 @@ $ chmod a+x ofuscador.sh
 ./ofuscador.sh arquivo_DUMP arquivo_ofuscador
 ```
 
+### Teste com arquivos anexos
+```
+./ofuscador.sh teste_db ofuscadores
+```
+
 
 ### ARQUIVO DUMP
 O arquivo de dump deve ser um dump simples feito pelo POSTGRESQL de versão 8.4 a 9.5, 
