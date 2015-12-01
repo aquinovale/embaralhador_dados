@@ -2,6 +2,11 @@
 Este é um shell script que tem como objetivo embaralhar alguns campos das tabelas.
 
 
+### Permissao de execucao
+```
+$ chmod a+x ofuscador.sh
+```
+
 ### Fazendo o embaralhamento
 ```
 ./ofuscador.sh arquivo_DUMP arquivo_ofuscador
