@@ -14,19 +14,21 @@ dump's que contiverem comando INSERT em vez do COPY não funcionarão
 
 
 ### ARQUIVO OFUSCADOR
-O arquivo ofuscador é basicamente um arquivo com tabela.campo
-Ex.: clientes.cpf
+O arquivo ofuscador é basicamente um arquivo com tabela.campo <br/>
+Ex.: clientes.cpf <br/>
 
-Caso a tabela esteja definida com Maiuscula, então deve se usar aspas duplas
-Ex.: "Pessoas".cpf
-Ex.: "Pessoas"."CPF"
+Caso a tabela esteja definida com Maiuscula, então deve se usar aspas duplas <br/>
+Ex.: "Pessoas".cpf <br/>
+Ex.: "Pessoas"."CPF" <br/>
 
 
 ### ARQUIVO dump_shuffle
-O arquivo dump_shuffle será criado no diretório de execução do script.
+O arquivo dump_shuffle será criado no diretório de execução do script.<br/>
 O procedimento de restore é o mesmo.
 
 
+#### AVISOS
+O embaralhamento foi testado com campos INT e VARCHAR, podendo não funcionar adequandamento em outros tipos.
 
 
 
