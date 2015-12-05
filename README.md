@@ -1,3 +1,9 @@
+Programa feito em Java por Vinicius Vale 25/11/2015
+
+Blog: www.viniciusvale.com <br/> 
+Empresa: www.valeconsultoria.com <br />
+Linkedin: linkedin.com/in/aquinovale
+
 # Embaralhador de Dados para Postgresql
 Este é um shell script que tem como objetivo embaralhar alguns campos das tabelas.
 
