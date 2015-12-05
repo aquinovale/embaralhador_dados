@@ -1,4 +1,4 @@
-Programa feito em Java por Vinicius Vale 25/11/2015
+Programa feito em SHELL Script por Vinicius Vale 25/11/2015
 
 Blog: www.viniciusvale.com <br/> 
 Empresa: www.valeconsultoria.com <br />
