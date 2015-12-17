@@ -1,4 +1,5 @@
-teste2.nome
-prv_banco.nossonum
-"SUPERTeste2".nome
-"SUPERTeste3"."NOME"
+pacientes.rg
+pacientes.cpf
+pacientes.nome
+pacientes2.nome
+pacientes2.obs

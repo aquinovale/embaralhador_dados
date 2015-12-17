@@ -10,6 +10,8 @@
 
 # Define o metodo de separação IFS
 ANTIGO_IFS=$IFS
+export IFS=$'\t\n'
+
 
 # Verifica quantidade de argumentos
 if [ $# -lt 2 ]; then
@@ -108,10 +110,7 @@ do
 				POS=0
 				READY_LINE=()
 
-				# IFS usado para definir os delimitadores padrões
-				export IFS=$'\t\n'
-
-				# Pega campo por campo da linha			
+				# Pega campo por campo da linha
 				for dado in $line 
 				do
 					# Verifica a posicao do campo com a posicao a ser embaralhada
@@ -167,10 +166,6 @@ do
 					fi				
 					let "POS++"
 				done
-				
-				# Define as configurações padrões novamente
-				export IFS=$ANTIGO_IFS
-
 				# Salva os campos adicionando a tabulação dentro do arquivo
 				echo -e "${READY_LINE[@]}" | sed 's/ /'$'\t''/g' >> $NEW
 			else
@@ -185,4 +180,4 @@ echo -e "Arquivo criado: $NEW"
 
 
 unset VECTOR
-
+export IFS=$ANTIGO_IFS
