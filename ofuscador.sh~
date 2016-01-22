@@ -10,8 +10,6 @@
 
 # Define o metodo de separação IFS
 ANTIGO_IFS=$IFS
-export IFS=$'\t\n'
-
 
 # Verifica quantidade de argumentos
 if [ $# -lt 2 ]; then
@@ -45,6 +43,12 @@ do
 	# Armazena o nome da tabela	
 	TABLE=$(echo -e "$line" | cut -f2 -d' ')
 	#echo -e "Tabela $TABLE encontrada."
+
+	if [ "SET search_path " = "$(echo -e "$line" | cut -d= -f1)" ]
+	then
+		SCHEMA=$(echo -e "$line"  | cut -d= -f2 | cut -d, -f1)
+		echo -e "Schema: $SCHEMA"
+	fi
 
 	# Verifica se o inicio da linha começa com COPY
 	if [ "COPY" = "$(echo -e "$line" | cut -f1 -d' ')" ]
@@ -110,7 +114,10 @@ do
 				POS=0
 				READY_LINE=()
 
-				# Pega campo por campo da linha
+				# IFS usado para definir os delimitadores padrões
+				export IFS=$'\t\n'
+
+				# Pega campo por campo da linha			
 				for dado in $line 
 				do
 					# Verifica a posicao do campo com a posicao a ser embaralhada
@@ -141,7 +148,7 @@ do
 								size=${#VECT_LETRA[*]}
 								max=$(( 32768 / size * size ))
 
-								for ((i=size-1; i>0; i--)); do
+								for ((i=size-1; i>size; i--)); do
 								   while (( (rand=$RANDOM) >= max )); do :; done
 								   rand=$(( rand % (i+1) ))
 								   tmp=${VECT_LETRA[i]} VECT_LETRA[i]=${VECT_LETRA[rand]} VECT_LETRA[rand]=$tmp
@@ -162,22 +169,94 @@ do
 						else				
 							# Adiciona campo dentro de um array		
 							READY_LINE+=("$dado")
+							
 						fi
 					fi				
 					let "POS++"
 				done
+				
+				# Define as configurações padrões novamente
+				export IFS=$ANTIGO_IFS
+
 				# Salva os campos adicionando a tabulação dentro do arquivo
-				echo -e "${READY_LINE[@]}" | sed 's/ /'$'\t''/g' >> $NEW
+				#echo -e "${READY_LINE[@]}" | sed 's/ /'$'\t''/g' >> $NEW
+				
+				LINE=''
+
+				size=${#READY_LINE[*]}
+				size_limit=$((size-1))
+
+				#for build_line in "${READY_LINE[@]}"; 
+				for ((i=0; i<size; i++)); 
+				do
+					build_line=${READY_LINE[i]}
+					if [ "$LINE" = "" ]
+ 					then
+						LINE=$build_line$'\t'						
+					else
+						if [ $size_limit -eq $i  ]
+						then
+							LINE=$LINE$build_line							
+						else
+							LINE=$LINE$build_line$'\t'						
+						fi	
+					
+					fi					
+
+				done
+				echo -e "$LINE" >> $NEW
 			else
-				echo -e "$line" >> $NEW
+				# IFS usado para definir os delimitadores padrões
+				export IFS=$'\t\n'
+
+				READY_LINE=()
+				for dado in $line 
+				do
+					if [ "$dado" = "N" ]
+					then
+						READY_LINE+=("\\N")
+					else
+						READY_LINE+=("$dado")
+					fi
+				done
+
+				# Define as configurações padrões novamente
+				export IFS=$ANTIGO_IFS
+
+				LINE=''
+
+				size=${#READY_LINE[*]}
+				size_limit=$((size-1))
+
+				#for build_line in "${READY_LINE[@]}"; 
+				for ((i=0; i<size; i++)); 
+				do
+					build_line=${READY_LINE[i]}
+					if [ "$LINE" = "" ]
+ 					then
+						LINE=$build_line$'\t'						
+					else
+						if [ $size_limit -eq $i  ]
+						then
+							LINE=$LINE$build_line							
+						else
+							LINE=$LINE$build_line$'\t'						
+						fi	
+					
+					fi					
+
+				done
+				echo -e "$LINE" >> $NEW
 			fi
 		fi
 	fi
 done < $DUMP
+
+/usr/bin/iconv -f iso8859-1 -t utf-8 $NEW > $NEW
 
 echo -e "Embaralhamento FINALIZADO"
 echo -e "Arquivo criado: $NEW"
 
 
 unset VECTOR
-export IFS=$ANTIGO_IFS
+
